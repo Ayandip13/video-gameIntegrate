@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, StatusBar } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
 
@@ -7,6 +7,10 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 export default function HomeScreen({ navigation }: Props) {
     return (
         <View style={styles.container}>
+            <StatusBar
+                barStyle="light-content"
+                backgroundColor="#111"
+            />
             <View style={styles.header}>
                 <Text style={styles.title}>Learning Hub</Text>
                 <Text style={styles.subtitle}>
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#0a0a0a',
     },
     header: {
-        paddingTop: 60,
+        paddingTop: 20,
         paddingHorizontal: 20,
         paddingBottom: 30,
         backgroundColor: '#111',

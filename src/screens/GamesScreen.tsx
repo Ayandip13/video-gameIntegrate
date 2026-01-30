@@ -6,6 +6,7 @@ import {
     ActivityIndicator,
     StyleSheet,
     Alert,
+    ToastAndroid,
 } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import { useEffect, useState } from 'react';
@@ -82,7 +83,7 @@ export default function GamesScreen() {
                 console.log('💾 Game state saved, localUri:', fileUri);
                 return updated;
             });
-            Alert.alert('Downloaded', `${game.title} is ready to play offline`);
+            ToastAndroid.show(`${game.title} is ready to play offline`, ToastAndroid.LONG);
         } catch (error) {
             console.error('Download failed:', error);
             setGames((prev) =>
@@ -90,7 +91,7 @@ export default function GamesScreen() {
                     g.id === game.id ? { ...g, downloading: false } : g
                 )
             );
-            Alert.alert('Error', 'Failed to prepare offline game');
+            ToastAndroid.show('Failed to prepare offline game', ToastAndroid.LONG);
         }
     };
 
@@ -118,10 +119,10 @@ export default function GamesScreen() {
                                 return updated;
                             });
 
-                            Alert.alert('Deleted', 'Game removed. You can download it again.');
+                            ToastAndroid.show('Game removed. You can download it again.', ToastAndroid.LONG);
                         } catch (error) {
                             console.error('Delete failed:', error);
-                            Alert.alert('Error', 'Failed to delete game');
+                            ToastAndroid.show('Failed to delete game', ToastAndroid.LONG);
                         }
                     },
                 },
@@ -217,7 +218,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#0a0a0a',
     },
     header: {
-        paddingTop: 50,
         paddingHorizontal: 20,
         paddingBottom: 20,
         backgroundColor: '#111',

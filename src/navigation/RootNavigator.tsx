@@ -1,5 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { TouchableOpacity } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import VideoTopicsScreen from '../screens/VideoTopicsScreen';
 import VideoPlayerScreen from '../screens/VideoPlayerScreen';
@@ -29,12 +31,49 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function RootNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="VideoTopics" component={VideoTopicsScreen} />
-                <Stack.Screen name="VideoPlayer" component={VideoPlayerScreen} />
-                <Stack.Screen name="Games" component={GamesScreen} />
-                <Stack.Screen name="GamePlayer" component={GamePlayerScreen} />
+            <Stack.Navigator
+                screenOptions={({ navigation, route }) => ({
+                    headerShown: route.name !== 'Home',
+                    headerStyle: {
+                        backgroundColor: '#111',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontWeight: '600',
+                        fontSize: 18,
+                    },
+                    headerLeft: () => (
+                        <TouchableOpacity
+                            onPress={() => navigation.goBack()}
+                            style={{ marginLeft: 8 }}
+                        >
+                            <Entypo name="chevron-left" size={28} color="white" />
+                        </TouchableOpacity>
+                    ),
+                    headerTitle: '',
+                    headerBackVisible: false,
+                })}
+            >
+                <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                />
+                <Stack.Screen
+                    name="VideoTopics"
+                    component={VideoTopicsScreen}
+                />
+                <Stack.Screen
+                    name="VideoPlayer"
+                    component={VideoPlayerScreen}
+                />
+                <Stack.Screen
+                    name="Games"
+                    component={GamesScreen}
+                />
+                <Stack.Screen
+                    name="GamePlayer"
+                    component={GamePlayerScreen}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );
