@@ -8,8 +8,8 @@ export default function HomeScreen({ navigation }: Props) {
     return (
         <View style={styles.container}>
             <StatusBar
-                barStyle="light-content"
-                backgroundColor="#111"
+                barStyle="dark-content"
+                backgroundColor="#ffffff"
             />
             <View style={styles.header}>
                 <Text style={styles.title}>Learning Hub</Text>
@@ -58,42 +58,49 @@ export default function HomeScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#f5f5f5',
     },
     header: {
-        paddingTop: 20,
+        paddingTop: 50,
         paddingHorizontal: 20,
         paddingBottom: 30,
-        backgroundColor: '#111',
+        backgroundColor: '#ffffff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
     },
     title: {
-        color: '#fff',
+        color: '#333',
         fontSize: 32,
         fontWeight: '700',
         marginBottom: 8,
     },
     subtitle: {
-        color: '#888',
+        color: '#666',
         fontSize: 16,
     },
     content: {
         padding: 20,
     },
     card: {
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#ffffff',
         borderRadius: 16,
         padding: 20,
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: '#2a2a2a',
+        borderColor: '#e0e0e0',
         flexDirection: 'row',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     cardIcon: {
         width: 50,
         height: 50,
         borderRadius: 12,
-        backgroundColor: '#2a2a2a',
+        backgroundColor: '#f0f0f0',
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 16,
@@ -105,13 +112,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     cardTitle: {
-        color: '#fff',
+        color: '#333',
         fontSize: 20,
         fontWeight: '600',
         marginBottom: 6,
     },
     cardDescription: {
-        color: '#888',
+        color: '#666',
         fontSize: 14,
         lineHeight: 20,
     },

@@ -147,6 +147,7 @@ export default function GamesScreen() {
         return (
             <View style={styles.gameCard}>
                 <View style={styles.gameInfo}>
+
                     <Text style={styles.gameTitle}>{item.title}</Text>
                     <Text style={styles.gameStatus}>
                         {isDownloaded
@@ -196,7 +197,6 @@ export default function GamesScreen() {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.headerTitle}>Games</Text>
                 <Text style={styles.headerSubtitle}>
                     Download games to play offline
                 </Text>
@@ -215,49 +215,47 @@ export default function GamesScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#fff',
     },
     header: {
         paddingHorizontal: 20,
         paddingBottom: 20,
-        backgroundColor: '#111',
-    },
-    headerTitle: {
-        color: '#fff',
-        fontSize: 28,
-        fontWeight: '700',
-        marginBottom: 6,
     },
     headerSubtitle: {
-        color: '#888',
-        fontSize: 14,
+        color: '#666',
+        fontSize: 18,
     },
     listContent: {
         padding: 16,
     },
     gameCard: {
-        backgroundColor: '#1a1a1a',
+        backgroundColor: '#ffffff',
         borderRadius: 12,
         padding: 16,
         marginBottom: 12,
         borderWidth: 1,
-        borderColor: '#2a2a2a',
+        borderColor: '#e0e0e0',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.08,
+        shadowRadius: 4,
+        elevation: 2,
     },
     gameInfo: {
         flex: 1,
         marginRight: 12,
     },
     gameTitle: {
-        color: '#fff',
+        color: '#333',
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 6,
     },
     gameStatus: {
-        color: '#888',
+        color: '#666',
         fontSize: 13,
     },
     playButton: {

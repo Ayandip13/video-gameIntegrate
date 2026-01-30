@@ -69,20 +69,20 @@ export default function GamePlayerScreen({ route }: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#f5f5f5',
     },
     header: {
         paddingTop: 12,
         paddingHorizontal: 20,
         paddingBottom: 16,
-        backgroundColor: '#111',
+        backgroundColor: '#ffffff',
         borderBottomWidth: 1,
-        borderBottomColor: '#2a2a2a',
+        borderBottomColor: '#e0e0e0',
     },
     title: {
         fontSize: 20,
         fontWeight: '600',
-        color: '#fff',
+        color: '#333',
         marginBottom: 4,
     },
     subtitle: {
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#0a0a0a',
+        backgroundColor: '#f5f5f5',
     },
     loadingText: {
         color: '#4CAF50',
