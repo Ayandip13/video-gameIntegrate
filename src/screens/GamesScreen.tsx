@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/RootNavigator';
 import { loadGames, saveGames, Game } from '../utils/storage';
+import { SIMPLE_GAME_HTML } from '../utils/offlineGames';
 
 const GAMES: Game[] = [
     {
@@ -51,6 +52,8 @@ export default function GamesScreen() {
     const downloadGame = async (game: Game) => {
         try {
             const fileUri = FileSystem.documentDirectory + `${game.id}.html`;
+            console.log('📥 Starting download for:', game.title);
+            console.log('💾 Saving to:', fileUri);
 
             setGames((prev) =>
                 prev.map((g) =>
@@ -58,30 +61,72 @@ export default function GamesScreen() {
                 )
             );
 
-            const fileInfo = await FileSystem.getInfoAsync(fileUri);
-            if (fileInfo.exists) {
-                updateGameState(game.id, { localUri: fileUri, downloading: false });
-                return;
-            }
+            // write offline HTML game
+            await FileSystem.writeAsStringAsync(
+                fileUri,
+                SIMPLE_GAME_HTML,
+                { encoding: FileSystem.EncodingType.UTF8 }
+            );
 
-            const result = await FileSystem.downloadAsync(game.url, fileUri);
+            console.log('✅ File written successfully');
+            console.log('📄 Game HTML length:', SIMPLE_GAME_HTML.length);
 
+            // update state + persist
             setGames((prev) => {
                 const updated = prev.map((g) =>
                     g.id === game.id
-                        ? { ...g, localUri: result.uri, downloading: false }
+                        ? { ...g, localUri: fileUri, downloading: false }
                         : g
                 );
                 saveGames(updated);
+                console.log('💾 Game state saved, localUri:', fileUri);
                 return updated;
             });
+            Alert.alert('Downloaded', `${game.title} is ready to play offline`);
         } catch (error) {
+            console.error('Download failed:', error);
             setGames((prev) =>
                 prev.map((g) =>
                     g.id === game.id ? { ...g, downloading: false } : g
                 )
             );
+            Alert.alert('Error', 'Failed to prepare offline game');
         }
+    };
+
+    const deleteGame = async (game: Game) => {
+        Alert.alert(
+            'Delete Game',
+            `Remove ${game.title} from your device?`,
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: async () => {
+                        try {
+                            if (game.localUri) {
+                                await FileSystem.deleteAsync(game.localUri, { idempotent: true });
+                                console.log('🗑️ Deleted file:', game.localUri);
+                            }
+
+                            setGames((prev) => {
+                                const updated = prev.map((g) =>
+                                    g.id === game.id ? { ...g, localUri: undefined } : g
+                                );
+                                saveGames(updated);
+                                return updated;
+                            });
+
+                            Alert.alert('Deleted', 'Game removed. You can download it again.');
+                        } catch (error) {
+                            console.error('Delete failed:', error);
+                            Alert.alert('Error', 'Failed to delete game');
+                        }
+                    },
+                },
+            ]
+        );
     };
 
     const updateGameState = (gameId: string, updates: Partial<Game>) => {
@@ -112,17 +157,25 @@ export default function GamesScreen() {
                 </View>
 
                 {isDownloaded ? (
-                    <Pressable
-                        style={styles.playButton}
-                        onPress={() =>
-                            navigation.navigate('GamePlayer', {
-                                uri: item.localUri!,
-                                title: item.title,
-                            })
-                        }
-                    >
-                        <Text style={styles.playButtonText}>▶ Play</Text>
-                    </Pressable>
+                    <View style={styles.buttonGroup}>
+                        <Pressable
+                            style={styles.playButton}
+                            onPress={() =>
+                                navigation.navigate('GamePlayer', {
+                                    uri: item.localUri!,
+                                    title: item.title,
+                                })
+                            }
+                        >
+                            <Text style={styles.playButtonText}>▶ Play</Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.deleteButton}
+                            onPress={() => deleteGame(item)}
+                        >
+                            <Text style={styles.deleteButtonText}>🗑️</Text>
+                        </Pressable>
+                    </View>
                 ) : isDownloading ? (
                     <View style={styles.loadingContainer}>
                         <ActivityIndicator size="small" color="#4CAF50" />
@@ -237,5 +290,20 @@ const styles = StyleSheet.create({
         minWidth: 100,
         alignItems: 'center',
         paddingVertical: 10,
+    },
+    buttonGroup: {
+        flexDirection: 'row',
+        gap: 8,
+    },
+    deleteButton: {
+        backgroundColor: '#f44336',
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    deleteButtonText: {
+        fontSize: 18,
     },
 });
