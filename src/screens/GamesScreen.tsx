@@ -130,16 +130,6 @@ export default function GamesScreen() {
         );
     };
 
-    const updateGameState = (gameId: string, updates: Partial<Game>) => {
-        setGames((prev) => {
-            const updated = prev.map((g) =>
-                g.id === gameId ? { ...g, ...updates } : g
-            );
-            saveGames(updated);
-            return updated;
-        });
-    };
-
     const renderGameCard = ({ item }: { item: Game }) => {
         const isDownloaded = !!item.localUri;
         const isDownloading = item.downloading;
